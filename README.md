@@ -8,7 +8,6 @@
 
 # To Do
 
-- Upload to GitHub
 - Remove header bar from 'list' screen
 - Change wording of buttons and layout/style on 'list' screen
 - list screen to be hidden until worry time
