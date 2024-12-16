@@ -1,45 +1,44 @@
 import { Tabs } from 'expo-router';
+import { StyleSheet } from 'react-native';
 import React from 'react';
-import { Platform } from 'react-native';
 
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { TabBarHomeIcon } from '@/components/navigation/TabBarHomeIcon';
+import { TabBarClockIcon } from '@/components/navigation/TabBarClockIcon';
+
+// TAB NAVIGATOR
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {},
-        }),
+        tabBarStyle: styles.tabBar,
       }}>
       <Tabs.Screen
-        name="index"
+        name="home" //Clicking this takes you to the home.tsx file
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: '',
+          tabBarIcon: ({ focused }) => (
+            <TabBarHomeIcon name={focused ? 'home' : 'home-outline'} color={'#355070'} />
+          ),
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="clock" //Clicking this takes you to the clock.js file
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: '',
+          tabBarIcon: ({ focused }) => (
+            <TabBarClockIcon name={focused ? 'clockcircle' : 'clockcircleo'} color={'#355070'} />
+          ),
         }}
       />
     </Tabs>
   );
 }
+
+const styles = StyleSheet.create({
+  tabBar: {
+    backgroundColor: '#7792B3',
+    padding: 10,
+  },
+});
