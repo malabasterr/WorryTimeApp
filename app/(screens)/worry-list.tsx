@@ -33,23 +33,26 @@ export default function ViewListScreen() {
   );
 
   return (
-    <View style={styles.container}>
+    <View style={styles.mainContainer}>
       <FlatList
         data={items}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderItem}
         ListEmptyComponent={<Text style={styles.empty}>No items yet.</Text>}
       />
-      <Button title="Return" onPress={() => router.push('/(tabs)/home')} />
+      <Pressable onPress={() => router.push('/(tabs)/home')}>
+        <Text style={styles.submit}>Return</Text>
+      </Pressable>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  mainContainer: {
     flex: 1,
     justifyContent: 'center',
     padding: 20,
+    backgroundColor:'#355070',
   },
   item: {
     fontSize: 18,
@@ -59,6 +62,17 @@ const styles = StyleSheet.create({
   },
   empty: {
     textAlign: 'center',
-    fontSize: 18,
+    fontSize: 10,
+  },
+  submit: {
+    width: 150,
+    height: 60,
+    marginLeft: 100,
+    marginBottom: 30,
+    padding: 11,
+    fontSize: 30,
+    backgroundColor:'#EAAC8B',
+    textAlign: 'center',
+    borderWidth: 2,
   },
 });
