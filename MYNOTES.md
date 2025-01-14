@@ -9,7 +9,6 @@
 # To Do
 
 - list screen to be hidden until worry time
-- Tidy layout on the time selection page
 - Set it so when first opening the app the user has to select a time
 - Program the actual worry time function
 

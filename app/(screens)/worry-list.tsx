@@ -77,13 +77,11 @@ export default function ViewListScreen() {
           <View style={styles.modalContent}>
             <Text style={styles.modalText}>{selectedItem}</Text>
             <View style={styles.modalButtonsContainer}>
-              {/* <Button title="Close" onPress={handleClose} />
-              <Button title="Delete" color="red" onPress={handleDelete} /> */}
               <Pressable onPress={handleClose}>
                 <Text style={styles.closeButton}>Close</Text>
               </Pressable>
               <Pressable onPress={handleDelete}>
-                <Text style={styles.deleteButton}>Delete</Text>
+                <Text style={styles.deleteButton}>Remove Worry</Text>
               </Pressable>
             </View>
           </View>
@@ -152,14 +150,14 @@ const styles = StyleSheet.create({
     color:'#355070',
     textAlign: 'center',
     padding: 10,
-    marginRight: 50,
+    marginRight: 40,
   },
   deleteButton: {
     fontSize: 18,
     color:'red',
     textAlign: 'center',
     padding: 10,
-    marginLeft: 50,
+    marginLeft: 30,
   },
   modalText: {
     fontSize: 22,
