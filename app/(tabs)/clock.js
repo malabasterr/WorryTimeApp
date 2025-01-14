@@ -84,10 +84,10 @@ export default function ClockScreen() {
               }}
             >
               <TouchableOpacity onPress={toggleTimePicker}>
-                <Text>Cancel</Text>
+                <Text style={styles.cancel}>Cancel</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={confirmIOSTime}>
-                <Text>Confirm</Text>
+                <Text style={styles.confirm}>Confirm</Text>
               </TouchableOpacity>
             </View>
           )}
@@ -135,10 +135,10 @@ export default function ClockScreen() {
                 }}
               >
                 <TouchableOpacity onPress={toggleDurationPicker}>
-                  <Text>Cancel</Text>
+                  <Text style={styles.cancelD}>Cancel</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={confirmDuration}>
-                  <Text>Confirm</Text>
+                  <Text style={styles.confirmD}>Confirm</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     margin: 20,
-    marginTop: 100,
+    marginTop: 70,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -186,13 +186,12 @@ const styles = StyleSheet.create({
   pickerContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 10,
-    backgroundColor: 'purple',
   },
   timeInput: {
     fontSize: 50,
     color: 'white',
-    paddingBottom: 30,
+    paddingTop: 150,
+    padding: 30,
   },
   durationInput: {
     fontSize: 50,
@@ -202,12 +201,29 @@ const styles = StyleSheet.create({
   for: {
     fontSize: 40,
     color: '#EAAC8B',
+    marginTop: 20,
   },
   timePicker: {
-    backgroundColor: 'black',
   },
   durationPicker: {
-    backgroundColor: 'green',
     width: 250,
-  }
+  },
+  cancel: {
+    fontSize: 20,
+    color: '#EAAC8B',
+    marginRight: 20,
+  },
+  confirm: {
+    fontSize: 20,
+    color: '#EAAC8B',
+    marginLeft: 20,
+  },
+  cancelD: {
+    fontSize: 20,
+    color: '#EAAC8B',
+  },
+  confirmD: {
+    fontSize: 20,
+    color: '#EAAC8B',
+  },
 });
