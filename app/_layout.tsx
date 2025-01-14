@@ -27,9 +27,9 @@ export default function RootLayout() {
   }
 
   return (
-    <Stack>
+    // headerShown: false globally hides the navigation bar
+    <Stack screenOptions={{ headerShown: false }}> 
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      {/* <Stack.Screen name="(screens)/[id]" /> */}
       <Stack.Screen name="zNotFound" />
     </Stack>
   ); 

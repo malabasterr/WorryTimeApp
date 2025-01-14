@@ -60,7 +60,7 @@ export default function ViewListScreen() {
         data={items}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderItem}
-        ListEmptyComponent={<Text style={styles.empty}>No items yet.</Text>}
+        ListEmptyComponent={<Text style={styles.empty}>No items</Text>}
       />
       <Pressable onPress={() => router.push('/(tabs)/home')}>
         <Text style={styles.submit}>Return</Text>
@@ -97,6 +97,7 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     justifyContent: 'center',
+    paddingTop: 50,
     padding: 20,
     backgroundColor:'#355070',
   },
@@ -110,6 +111,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 25,
     color: 'white',
+    padding: 50,
   },
   listItems: {
     textAlign: 'left',
@@ -160,7 +162,7 @@ const styles = StyleSheet.create({
     marginLeft: 50,
   },
   modalText: {
-    fontSize: 24,
+    fontSize: 22,
     marginBottom: 20,
   },
 });

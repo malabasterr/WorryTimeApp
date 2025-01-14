@@ -59,99 +59,105 @@ export default function ClockScreen() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <View style={styles.mainContainer}>
         <View style={styles.titleContainer}>
-          <Text style={styles.title}>Your Worry Time is</Text>
+          <Text style={styles.title}>Your Worry Time</Text>
+          <Text style={styles.subtitle}>is currently set to:</Text>
         </View>
 
-        {showTimePicker && (
-          <DateTimePicker
-            mode="time"
-            display="spinner"
-            value={time}
-            onChange={onChange}
-            style={styles.timePicker}
-            minuteInterval={5}
-          />
-        )}
+        <View style={styles.pickerContainer}>
 
-        {showTimePicker && Platform.OS === "ios" && (
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-around",
-            }}
-          >
-            <TouchableOpacity onPress={toggleTimePicker}>
-              <Text>Cancel</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={confirmIOSTime}>
-              <Text>Confirm</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-
-        {!showTimePicker && (
-          <Pressable onPress={toggleTimePicker}>
-            <TextInput
-              style={styles.input}
-              placeholder="set time"
-              value={worryTime}
-              onChangeText={setWorryTime}
-              editable={false}
-              onPressIn={toggleTimePicker}
+          {showTimePicker && (
+            <DateTimePicker
+              mode="time"
+              display="spinner"
+              value={time}
+              onChange={onChange}
+              style={styles.timePicker}
+              minuteInterval={5}
             />
-          </Pressable>
-        )}
+          )}
 
-        <Text style={styles.title}>for</Text>
-
-        {showDurationPicker && (
-          <View>
-            <Picker
-              selectedValue={tempDuration} // Bind temporary state to the picker
-              onValueChange={(selectedDuration) =>
-                setTempDuration(selectedDuration)
-              }>
-                <Picker.Item label="5 minutes" value="5 minutes" />
-                <Picker.Item label="10 minutes" value="10 minutes" />
-                <Picker.Item label="15 minutes" value="15 minutes" />
-                <Picker.Item label="20 minutes" value="20 minutes" />
-                <Picker.Item label="25 minutes" value="25 minutes" />
-                <Picker.Item label="30 minutes" value="30 minutes" />
-                <Picker.Item label="35 minutes" value="35 minutes" />
-                <Picker.Item label="40 minutes" value="40 minutes" />
-                <Picker.Item label="45 minutes" value="45 minutes" />
-                <Picker.Item label="50 minutes" value="50 minutes" />
-                <Picker.Item label="55 minutes" value="55 minutes" />
-                <Picker.Item label="60 minutes" value="60 minutes" />
-            </Picker>
+          {showTimePicker && Platform.OS === "ios" && (
             <View
               style={{
                 flexDirection: "row",
                 justifyContent: "space-around",
               }}
             >
-              <TouchableOpacity onPress={toggleDurationPicker}>
+              <TouchableOpacity onPress={toggleTimePicker}>
                 <Text>Cancel</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={confirmDuration}>
+              <TouchableOpacity onPress={confirmIOSTime}>
                 <Text>Confirm</Text>
               </TouchableOpacity>
             </View>
-          </View>
-        )}
+          )}
 
-          {!showDurationPicker && (
-            <Pressable onPress={toggleDurationPicker}>
+          {!showTimePicker && (
+            <Pressable onPress={toggleTimePicker}>
               <TextInput
-                style={styles.input}
-                placeholder="set duration"
-                value={worryDuration}
-                onChangeText={setWorryDuration}
+                style={styles.timeInput}
+                placeholder="set time"
+                value={worryTime}
+                onChangeText={setWorryTime}
                 editable={false}
-                onPressIn={toggleDurationPicker}
-              />           
+                onPressIn={toggleTimePicker}
+              />
             </Pressable>
           )}
+
+          <Text style={styles.for}>for</Text>
+
+          {showDurationPicker && (
+            <View>
+              <Picker
+                style={styles.durationPicker}
+                selectedValue={tempDuration} // Bind temporary state to the picker
+                onValueChange={(selectedDuration) =>
+                  setTempDuration(selectedDuration)
+                }>
+                  <Picker.Item label="5 minutes" value="5 minutes" />
+                  <Picker.Item label="10 minutes" value="10 minutes" />
+                  <Picker.Item label="15 minutes" value="15 minutes" />
+                  <Picker.Item label="20 minutes" value="20 minutes" />
+                  <Picker.Item label="25 minutes" value="25 minutes" />
+                  <Picker.Item label="30 minutes" value="30 minutes" />
+                  <Picker.Item label="35 minutes" value="35 minutes" />
+                  <Picker.Item label="40 minutes" value="40 minutes" />
+                  <Picker.Item label="45 minutes" value="45 minutes" />
+                  <Picker.Item label="50 minutes" value="50 minutes" />
+                  <Picker.Item label="55 minutes" value="55 minutes" />
+                  <Picker.Item label="60 minutes" value="60 minutes" />
+              </Picker>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-around",
+                }}
+              >
+                <TouchableOpacity onPress={toggleDurationPicker}>
+                  <Text>Cancel</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={confirmDuration}>
+                  <Text>Confirm</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
+
+            {!showDurationPicker && (
+              <Pressable onPress={toggleDurationPicker}>
+                <TextInput
+                  style={styles.durationInput}
+                  placeholder="set duration"
+                  value={worryDuration}
+                  onChangeText={setWorryDuration}
+                  editable={false}
+                  onPressIn={toggleDurationPicker}
+                />           
+              </Pressable>
+            )}
+
+        </View>
 
       </View>
     </GestureHandlerRootView>
@@ -170,16 +176,38 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
-    fontSize: 60,
+    fontSize: 50,
     color: '#EAAC8B',
   },
-  input: {
+  subtitle: {
+    fontSize: 30,
+    color: '#EAAC8B',
+  },
+  pickerContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 10,
+    backgroundColor: 'purple',
+  },
+  timeInput: {
+    fontSize: 50,
+    color: 'white',
+    paddingBottom: 30,
+  },
+  durationInput: {
+    fontSize: 50,
+    color: 'white',
+    paddingTop: 30,
+  },
+  for: {
     fontSize: 40,
     color: '#EAAC8B',
   },
   timePicker: {
-    height: 120,
-    marginTop: -10,
-    color: "red",
+    backgroundColor: 'black',
+  },
+  durationPicker: {
+    backgroundColor: 'green',
+    width: 250,
   }
 });
