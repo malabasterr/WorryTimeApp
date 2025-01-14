@@ -13,6 +13,7 @@
 - List screen to be hidden until 'start' button clicked
 - Timer added to list screen
 - When timer finishes, navigate to appropraite cleared/not cleared screen and delete any remaining worries
+- Add edge case for if a user does not input any worries at all
 
 # Good to Do
 
