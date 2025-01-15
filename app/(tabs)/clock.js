@@ -1,10 +1,10 @@
 import { StyleSheet, Platform, Text, TextInput, View, Pressable } from 'react-native';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { TouchableOpacity, GestureHandlerRootView } from 'react-native-gesture-handler';
-import {Picker} from '@react-native-picker/picker';
+import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useEffect } from 'react';
+import { useRouter } from 'expo-router';
 
 export default function ClockScreen() {
 
@@ -14,6 +14,7 @@ export default function ClockScreen() {
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [showDurationPicker, setShowDurationPicker] = useState(false);
   const [tempDuration, setTempDuration] = useState(); // To store the temporary duration while selecting
+    const router = useRouter();
 
   useEffect(() => {
     const loadWorrySettings = async () => {
@@ -31,6 +32,30 @@ export default function ClockScreen() {
     if (time) await AsyncStorage.setItem('worryTime', time);
     if (duration) await AsyncStorage.setItem('worryDuration', duration);
   };
+
+////////
+
+// Redirect logic
+useEffect(() => {
+  const checkRedirect = async () => {
+    if (!worryTime) return;
+
+    const [hour, minute] = worryTime.split(':').map(Number); // Parse the worryTime
+    const worryDateTime = new Date();
+    worryDateTime.setHours(hour, minute, 0, 0);
+
+    const now = new Date();
+
+    // Check if current time is after worryTime and before midnight
+    if (now >= worryDateTime && now.getDate() === worryDateTime.getDate()) {
+      router.push('/(screens)/start-worry-time'); // Redirect to another screen
+    }
+  };
+
+  checkRedirect();
+}, [worryTime]);
+
+/////////
 
   const confirmIOSTime = () => {
     const formattedTime = time.toLocaleTimeString([], {
