@@ -26,6 +26,8 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
     paddingTop: 50,
     padding: 20,
     backgroundColor:'#355070',
@@ -33,15 +35,17 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 50,
     color: '#EAAC8B',
+    marginBottom: 30,
   },
   message: {
     fontSize: 30,
+    textAlign: 'center',
     color: '#EAAC8B',
+    marginBottom: 30,
   },
   startButton: {
     width: 150,
     height: 60,
-    marginLeft: 100,
     marginBottom: 30,
     marginTop: 10,
     padding: 11,
