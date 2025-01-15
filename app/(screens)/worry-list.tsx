@@ -11,6 +11,7 @@ export default function ViewListScreen() {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const router = useRouter();
+  const [timeLeft, setTimeLeft] = useState(1 * 60);
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -56,6 +57,31 @@ export default function ViewListScreen() {
     </Pressable>
   );
 
+  useEffect(() => {
+    if (timeLeft <= 0) {
+      setModalVisible(true); // Show modal when time is up
+      return;
+    }
+
+    const timer = setInterval(() => {
+      setTimeLeft((prevTime) => prevTime - 1);
+    }, 1000);
+
+    return () => clearInterval(timer); // Clean up the timer on unmount
+  }, [timeLeft]);
+
+  // Format the time in MM:SS format
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+  };
+
+  const handleBackToHome = () => {
+    setModalVisible(false); // Close modal
+    router.push('/(screens)/not-cleared'); // Navigate to the Home screen
+  };
+  
   return (
     <View style={styles.mainContainer}>
       <FlatList
@@ -64,6 +90,29 @@ export default function ViewListScreen() {
         renderItem={renderItem}
         ListEmptyComponent={<Text style={styles.empty}>No items</Text>}
       />
+
+      <Text style={styles.timerText}>
+        <Text>Time remaining:  </Text>
+        {timeLeft > 0 ? formatTime(timeLeft) : "Time's Up!"}
+      </Text>
+
+      {/* Modal Popup */}
+      <Modal
+        transparent={true}
+        visible={modalVisible}
+        animationType="slide"
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.timerModalOverlay}>
+          <View style={styles.timerModalContent}>
+            <Text style={styles.timerModalText}>Time's Up!</Text>
+            <Pressable style={styles.timerModalButton} onPress={handleBackToHome}>
+              <Text style={styles.timerModalButtonText}>Back to Home</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
+
       <Pressable onPress={() => router.push('/(tabs)/home')}>
         <Text style={styles.submit}>Return</Text>
       </Pressable>
@@ -97,6 +146,7 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     justifyContent: 'center',
+    alignItems: 'center',
     paddingTop: 50,
     padding: 20,
     backgroundColor:'#355070',
@@ -118,10 +168,43 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: 'white',
   },
+  timerText: {
+    fontSize: 30,
+    color: '#EAAC8B',
+  },
+  timerModalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  timerModalContent: {
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+    width: '80%',
+  },
+  timerModalText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    color: '#355070',
+  },
+  timerModalButton: {
+    backgroundColor: '#EAAC8B',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  timerModalButtonText: {
+    fontSize: 18,
+    color: '#fff',
+    fontWeight: 'bold',
+  },
   submit: {
     width: 150,
     height: 60,
-    marginLeft: 100,
     marginBottom: 30,
     marginTop: 10,
     padding: 11,
