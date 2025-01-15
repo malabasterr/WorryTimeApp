@@ -46,8 +46,11 @@ export default function HomeScreen() {
         <Pressable onPress={saveItem} >
         <Text style={styles.submit}>Save</Text>
         </Pressable>
-      <Pressable onPress={() => router.push('/(screens)/worry-list')}>
+      {/* <Pressable onPress={() => router.push('/(screens)/worry-list')}>
         <Text style={styles.submit}>List</Text>
+      </Pressable> */}
+      <Pressable onPress={() => router.push('/(screens)/start-worry-time')}>
+        <Text style={styles.submit}>Start</Text>
       </Pressable>
     </View>
   );

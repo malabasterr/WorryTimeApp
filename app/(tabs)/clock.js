@@ -3,7 +3,6 @@ import { useState } from 'react';
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { TouchableOpacity, GestureHandlerRootView } from 'react-native-gesture-handler';
 import {Picker} from '@react-native-picker/picker';
-
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect } from 'react';
 

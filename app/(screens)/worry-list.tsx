@@ -3,6 +3,8 @@ import { View, Text, FlatList, StyleSheet, Pressable, Modal} from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 
+// TIMER FUNCTION NEEDS TO BE ADDED
+
 export default function ViewListScreen() {
   const [items, setItems] = useState<string[]>([]);
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
