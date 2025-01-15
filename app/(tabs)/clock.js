@@ -4,6 +4,9 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { TouchableOpacity, GestureHandlerRootView } from 'react-native-gesture-handler';
 import {Picker} from '@react-native-picker/picker';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect } from 'react';
+
 export default function ClockScreen() {
 
   const [worryTime, setWorryTime] = useState(""); // To store the formatted time string
@@ -12,6 +15,40 @@ export default function ClockScreen() {
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [showDurationPicker, setShowDurationPicker] = useState(false);
   const [tempDuration, setTempDuration] = useState(); // To store the temporary duration while selecting
+
+  useEffect(() => {
+    const loadWorrySettings = async () => {
+      const savedTime = await AsyncStorage.getItem('worryTime');
+      const savedDuration = await AsyncStorage.getItem('worryDuration');
+
+      if (savedTime) setWorryTime(savedTime);
+      if (savedDuration) setWorryDuration(savedDuration);
+    };
+
+    loadWorrySettings();
+  }, []);
+
+  const saveWorrySettings = async (time, duration) => {
+    if (time) await AsyncStorage.setItem('worryTime', time);
+    if (duration) await AsyncStorage.setItem('worryDuration', duration);
+  };
+
+  const confirmIOSTime = () => {
+    const formattedTime = time.toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+
+    setWorryTime(formattedTime);
+    saveWorrySettings(formattedTime, worryDuration);
+    toggleTimePicker();
+  };
+
+  const confirmDuration = () => {
+    setWorryDuration(tempDuration);
+    saveWorrySettings(worryTime, tempDuration);
+    toggleDurationPicker();
+  };
 
   const toggleTimePicker = () => {
     setShowTimePicker(!showTimePicker);
@@ -38,21 +75,6 @@ export default function ClockScreen() {
     } else {
       toggleTimePicker();
     }
-  };
-
-  const confirmIOSTime = () => {
-    const formattedTime = time.toLocaleTimeString([], {
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-
-    setWorryTime(formattedTime);
-    toggleTimePicker();
-  };
-
-  const confirmDuration = () => {
-    setWorryDuration(tempDuration);
-    toggleDurationPicker();
   };
 
   return (
