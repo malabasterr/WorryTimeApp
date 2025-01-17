@@ -8,11 +8,15 @@
 
 # Must Do
 
+- If person cdoes not clear all their worries when the timer ends, delete any remaining
+- Add edge case for if a user does not input any worries at all
+- Notification when worry time starts (and any other notifcations deemed neccessary)
+
 At the moment, when the saved time is reached (between then and midnight), when the user tries to access the 'clock' it navigates them to the start-worry-time page.
 The redirection also needs to also be added to the homepage, but only when other elements are in place
 
-- If person clears all of their worries, navigate to appropraite cleared screen and delete any remaining worries.
-- Add edge case for if a user does not input any worries at all
+### Last stages
+- Remove buttons from homepage and list page that are for development only
 
 # Good to Do
 

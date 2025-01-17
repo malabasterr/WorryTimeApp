@@ -103,7 +103,18 @@ export default function ViewListScreen() {
         data={items}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderItem}
-        ListEmptyComponent={<Text style={styles.empty}>No items</Text>}
+        ListEmptyComponent={
+          <View style={styles.messageContainer}>
+            <Text style={styles.message}>
+              Well done for clearing your worries! 
+              Now it's time to refocus on something else.
+              Remember to keep writing down your worries for your next worry time.
+            </Text>
+            <Pressable onPress={() => router.push('/(tabs)/home')}>
+              <Text style={styles.submit}>Close</Text>
+            </Pressable>
+          </View>
+        }
       />
 
       <Text style={styles.timerText}>
@@ -263,5 +274,24 @@ const styles = StyleSheet.create({
   itemModalText: {
     fontSize: 22,
     marginBottom: 20,
+  },
+  messageContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+    paddingTop: 150,
+    padding: 20,
+    backgroundColor:'#355070',
+  },
+  title: {
+    fontSize: 50,
+    color: '#EAAC8B',
+    marginBottom: 30,
+  },
+  message: {
+    fontSize: 30,
+    textAlign: 'center',
+    color: '#EAAC8B',
+    marginBottom: 30,
   },
 });
