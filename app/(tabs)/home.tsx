@@ -46,9 +46,12 @@ export default function HomeScreen() {
         <Pressable onPress={saveItem} >
         <Text style={styles.submit}>Save</Text>
         </Pressable>
-      {/* <Pressable onPress={() => router.push('/(screens)/worry-list')}>
+
+        
+      {/* Eventually these will be removed as we don't want them to be able to navigate back to start or list! */}
+      <Pressable onPress={() => router.push('/(screens)/worry-list')}>
         <Text style={styles.submit}>List</Text>
-      </Pressable> */}
+      </Pressable>
       <Pressable onPress={() => router.push('/(screens)/start-worry-time')}>
         <Text style={styles.submit}>Start</Text>
       </Pressable>

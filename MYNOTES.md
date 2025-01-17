@@ -8,8 +8,6 @@
 
 # Must Do
 
-# MADDY NEXT TIME YOU OPEN THE APP SET THE CLOCK SCREEN TO LIKE 11PM AND 5MINS
-
 At the moment, when the saved time is reached (between then and midnight), when the user tries to access the 'clock' it navigates them to the start-worry-time page.
 The redirection also needs to also be added to the homepage, but only when other elements are in place
 

@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, Pressable, Modal} from 'react-native';
+import { View, Text, FlatList, StyleSheet, Pressable, Modal } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
-
-// TIMER FUNCTION NEEDS TO BE ADDED
 
 export default function ViewListScreen() {
   const [items, setItems] = useState<string[]>([]);
@@ -11,7 +9,7 @@ export default function ViewListScreen() {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const router = useRouter();
-  const [timeLeft, setTimeLeft] = useState(1 * 60);
+  const [timeLeft, setTimeLeft] = useState<number | null>(null); // Start with null
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -25,7 +23,23 @@ export default function ViewListScreen() {
       }
     };
 
+    const fetchTimerDuration = async () => {
+      try {
+        const savedDuration = await AsyncStorage.getItem('worryDuration');
+        if (savedDuration) {
+          const durationInMinutes = parseInt(savedDuration.split(' ')[0], 10);
+          setTimeLeft(durationInMinutes * 60); // Set fetched duration
+        } else {
+          setTimeLeft(60); // Default to 1 minute
+        }
+      } catch (error) {
+        console.log('Error fetching duration:', error);
+        setTimeLeft(60); // Default to 1 minute in case of error
+      }
+    };
+
     fetchItems();
+    fetchTimerDuration();
   }, []);
 
   const handlePressItem = (item: string, index: number) => {
@@ -58,19 +72,19 @@ export default function ViewListScreen() {
   );
 
   useEffect(() => {
+    if (timeLeft === null) return; // Skip if timer is not initialized
     if (timeLeft <= 0) {
-      setModalVisible(true); // Show modal when time is up
+      setModalVisible(true); // Show modal only when time genuinely reaches 0
       return;
     }
 
     const timer = setInterval(() => {
-      setTimeLeft((prevTime) => prevTime - 1);
+      setTimeLeft((prevTime) => (prevTime !== null ? prevTime - 1 : 0));
     }, 1000);
 
-    return () => clearInterval(timer); // Clean up the timer on unmount
+    return () => clearInterval(timer); // Clean up on unmount
   }, [timeLeft]);
 
-  // Format the time in MM:SS format
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -78,10 +92,10 @@ export default function ViewListScreen() {
   };
 
   const handleBackToHome = () => {
-    setModalVisible(false); // Close modal
-    router.push('/(screens)/not-cleared'); // Navigate to the Home screen
+    setModalVisible(false);
+    router.push('/(screens)/not-cleared');
   };
-  
+
   return (
     <View style={styles.mainContainer}>
       <FlatList
@@ -92,11 +106,11 @@ export default function ViewListScreen() {
       />
 
       <Text style={styles.timerText}>
-        <Text>Time remaining:  </Text>
-        {timeLeft > 0 ? formatTime(timeLeft) : "Time's Up!"}
+        <Text>Time remaining: </Text>
+        {timeLeft !== null && timeLeft > 0 ? formatTime(timeLeft) : "Time's Up!"}
       </Text>
 
-      {/* Modal Popup */}
+      {/* Timer Modal */}
       <Modal
         transparent={true}
         visible={modalVisible}
@@ -113,11 +127,12 @@ export default function ViewListScreen() {
         </View>
       </Modal>
 
+      {/* Eventually this will be removed as we don't want them to be able to navigate back to the homepage! */}
       <Pressable onPress={() => router.push('/(tabs)/home')}>
         <Text style={styles.submit}>Return</Text>
       </Pressable>
 
-      {/* Modal for Close/Delete */}
+      {/* Item Modal */}
       <Modal
         animationType="slide"
         transparent={true}
