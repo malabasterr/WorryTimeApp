@@ -7,7 +7,8 @@ export default function ViewListScreen() {
   const [items, setItems] = useState<string[]>([]);
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [timerModalVisible, setTimerModalVisible] = useState(false);
+  const [itemModalVisible, setItemModalVisible] = useState(false);
   const router = useRouter();
   const [timeLeft, setTimeLeft] = useState<number | null>(null); // Start with null
 
@@ -45,7 +46,7 @@ export default function ViewListScreen() {
   const handlePressItem = (item: string, index: number) => {
     setSelectedItem(item);
     setSelectedIndex(index);
-    setModalVisible(true);
+    setItemModalVisible(true);
   };
 
   const handleDelete = async () => {
@@ -58,11 +59,11 @@ export default function ViewListScreen() {
         console.log('Error deleting item:', error);
       }
     }
-    setModalVisible(false);
+    setItemModalVisible(false);
   };
 
   const handleClose = () => {
-    setModalVisible(false);
+    setItemModalVisible(false);
   };
 
   const renderItem = ({ item, index }: { item: string; index: number }) => (
@@ -74,7 +75,7 @@ export default function ViewListScreen() {
   useEffect(() => {
     if (timeLeft === null) return; // Skip if timer is not initialized
     if (timeLeft <= 0) {
-      setModalVisible(true); // Show modal only when time genuinely reaches 0
+      setTimerModalVisible(true); // Show modal only when time genuinely reaches 0
       return;
     }
 
@@ -92,7 +93,7 @@ export default function ViewListScreen() {
   };
 
   const handleBackToHome = () => {
-    setModalVisible(false);
+    setTimerModalVisible(false);
     router.push('/(screens)/not-cleared');
   };
 
@@ -113,9 +114,9 @@ export default function ViewListScreen() {
       {/* Timer Modal */}
       <Modal
         transparent={true}
-        visible={modalVisible}
+        visible={timerModalVisible}
         animationType="slide"
-        onRequestClose={() => setModalVisible(false)}
+        onRequestClose={() => setTimerModalVisible(false)}
       >
         <View style={styles.timerModalOverlay}>
           <View style={styles.timerModalContent}>
@@ -136,13 +137,13 @@ export default function ViewListScreen() {
       <Modal
         animationType="slide"
         transparent={true}
-        visible={modalVisible}
+        visible={itemModalVisible}
         onRequestClose={handleClose}
       >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalText}>{selectedItem}</Text>
-            <View style={styles.modalButtonsContainer}>
+        <View style={styles.itemModalContainer}>
+          <View style={styles.itemModalContent}>
+            <Text style={styles.itemModalText}>{selectedItem}</Text>
+            <View style={styles.itemModalButtonsContainer}>
               <Pressable onPress={handleClose}>
                 <Text style={styles.closeButton}>Close</Text>
               </Pressable>
@@ -228,20 +229,20 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     borderWidth: 2,
   },
-  modalContainer: {
+  itemModalContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
-  modalContent: {
+  itemModalContent: {
     width: 300,
     padding: 20,
     backgroundColor: '#fff',
     borderRadius: 10,
     alignItems: 'center',
   },
-  modalButtonsContainer: {
+  itemModalButtonsContainer: {
     display: 'flex',
     flexDirection: 'row',
   },
@@ -259,7 +260,7 @@ const styles = StyleSheet.create({
     padding: 10,
     marginLeft: 30,
   },
-  modalText: {
+  itemModalText: {
     fontSize: 22,
     marginBottom: 20,
   },
