@@ -10,12 +10,15 @@ export default function ViewListScreen() {
   const [timerModalVisible, setTimerModalVisible] = useState(false);
   const [itemModalVisible, setItemModalVisible] = useState(false);
   const router = useRouter();
-  const [timeLeft, setTimeLeft] = useState<number | null>(null); // Start with null
+  const [timeLeft, setTimeLeft] = useState<number | null>(null);
 
+  // Collects required info for the page- worries and timer duration
   useEffect(() => {
+
+    // Collect saved worries and convert into list
     const fetchItems = async () => {
       try {
-        const currentItems = await AsyncStorage.getItem('shoppingList');
+        const currentItems = await AsyncStorage.getItem('worryList');
         if (currentItems) {
           setItems(JSON.parse(currentItems));
         }
@@ -24,6 +27,7 @@ export default function ViewListScreen() {
       }
     };
 
+    // Collect saved duration from clock.js and convert into seconds
     const fetchTimerDuration = async () => {
       try {
         const savedDuration = await AsyncStorage.getItem('worryDuration');
@@ -31,30 +35,31 @@ export default function ViewListScreen() {
           const durationInMinutes = parseInt(savedDuration.split(' ')[0], 10);
           setTimeLeft(durationInMinutes * 60); // Set fetched duration
         } else {
-          setTimeLeft(60); // Default to 1 minute
+          setTimeLeft(60); // Default to 1 minute if no time found
         }
       } catch (error) {
         console.log('Error fetching duration:', error);
         setTimeLeft(60); // Default to 1 minute in case of error
       }
     };
-
     fetchItems();
     fetchTimerDuration();
   }, []);
 
+  // Function to handle when user taps on one of the items in the list
   const handlePressItem = (item: string, index: number) => {
     setSelectedItem(item);
     setSelectedIndex(index);
     setItemModalVisible(true);
   };
 
+  // Function to delete item from list
   const handleDelete = async () => {
     if (selectedIndex !== null) {
       try {
         const updatedItems = items.filter((_, index) => index !== selectedIndex);
         setItems(updatedItems);
-        await AsyncStorage.setItem('shoppingList', JSON.stringify(updatedItems));
+        await AsyncStorage.setItem('worryList', JSON.stringify(updatedItems));
       } catch (error) {
         console.log('Error deleting item:', error);
       }
@@ -62,36 +67,50 @@ export default function ViewListScreen() {
     setItemModalVisible(false);
   };
 
+  // Function to close the pop-up that appears when an item is tapped
   const handleClose = () => {
     setItemModalVisible(false);
   };
 
+  // Renders each item as a pressable component
   const renderItem = ({ item, index }: { item: string; index: number }) => (
     <Pressable onPress={() => handlePressItem(item, index)} style={styles.item}>
       <Text style={styles.listItems}>{item}</Text>
     </Pressable>
   );
 
+  // Removes all items from list
+  const clearList = async () => {
+    try {
+      setItems([]);
+      await AsyncStorage.setItem('worryList',JSON.stringify([]));
+    } catch (error) {
+      console.log('Error clearing remaining items from list', error);
+    }
+  }
+
+  // Creates timer from the saved duration above
   useEffect(() => {
-    if (timeLeft === null) return; // Skip if timer is not initialized
+    if (timeLeft === null) return; // Skip if timer is not initialised
     if (timeLeft <= 0) {
-      setTimerModalVisible(true); // Show modal only when time genuinely reaches 0
+      setTimerModalVisible(true); // Show modal only when time reaches 0
+      clearList();
       return;
     }
-
     const timer = setInterval(() => {
       setTimeLeft((prevTime) => (prevTime !== null ? prevTime - 1 : 0));
     }, 1000);
-
     return () => clearInterval(timer); // Clean up on unmount
   }, [timeLeft]);
 
+  // Converts time into readable format
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
   };
 
+  // Function to handle the navigation away from the page when complete
   const handleBackToHome = () => {
     setTimerModalVisible(false);
     router.push('/(screens)/not-cleared');
@@ -105,6 +124,7 @@ export default function ViewListScreen() {
         renderItem={renderItem}
         ListEmptyComponent={
           <View style={styles.messageContainer}>
+            {/* Message that shows when the user has no worries on their list */}
             <Text style={styles.message}>
               Well done for clearing your worries! 
               Now it's time to refocus on something else.
@@ -116,7 +136,6 @@ export default function ViewListScreen() {
           </View>
         }
       />
-
       <Text style={styles.timerText}>
         <Text>Time remaining: </Text>
         {timeLeft !== null && timeLeft > 0 ? formatTime(timeLeft) : "Time's Up!"}

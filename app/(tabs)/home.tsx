@@ -11,10 +11,10 @@ export default function HomeScreen() {
   const saveItem = async () => {
     if (item.trim()) {
       try {
-        const currentItems = await AsyncStorage.getItem('shoppingList');
+        const currentItems = await AsyncStorage.getItem('worryList');
         const itemList = currentItems ? JSON.parse(currentItems) : [];
         itemList.push(item);
-        await AsyncStorage.setItem('shoppingList', JSON.stringify(itemList));
+        await AsyncStorage.setItem('worryList', JSON.stringify(itemList));
         Alert.alert(`Well done for recording your worry!`, `It's saved for worry time. Now it's time to refocus on something else.`);
         setItem('');
       } catch (error) {
