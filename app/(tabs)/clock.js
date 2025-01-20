@@ -33,29 +33,28 @@ export default function ClockScreen() {
     if (duration) await AsyncStorage.setItem('worryDuration', duration);
   };
 
-////////
+// Redirect logic- not currently required on this screen as it is available on the home screen.
+// Not deleting yet until confident all running smoothly
 
-// Redirect logic
-useEffect(() => {
-  const checkRedirect = async () => {
-    if (!worryTime) return;
+// useEffect(() => {
+//   const checkRedirect = async () => {
+//     if (!worryTime) return;
 
-    const [hour, minute] = worryTime.split(':').map(Number); // Parse the worryTime
-    const worryDateTime = new Date();
-    worryDateTime.setHours(hour, minute, 0, 0);
+//     const [hour, minute] = worryTime.split(':').map(Number); // Parse the worryTime
+//     const worryDateTime = new Date();
+//     worryDateTime.setHours(hour, minute, 0, 0);
 
-    const now = new Date();
+//     const now = new Date();
 
-    // Check if current time is after worryTime and before midnight
-    if (now >= worryDateTime && now.getDate() === worryDateTime.getDate()) {
-      router.push('/(screens)/start-worry-time'); // Redirect to another screen
-    }
-  };
+//     // Check if current time is after worryTime and before midnight
+//     if (now >= worryDateTime && now.getDate() === worryDateTime.getDate()) {
+//       router.push('/(screens)/start-worry-time'); // Redirect to another screen
+//     }
+//   };
 
-  checkRedirect();
-}, [worryTime]);
+//   checkRedirect();
+// }, [worryTime]);
 
-/////////
 
   const confirmIOSTime = () => {
     const formattedTime = time.toLocaleTimeString([], {

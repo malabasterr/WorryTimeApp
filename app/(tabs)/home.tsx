@@ -1,5 +1,5 @@
 import { View, Alert, Pressable, TextInput, Text, StyleSheet } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 
@@ -7,6 +7,47 @@ export default function HomeScreen() {
 
   const router = useRouter();
   const [item, setItem] = useState('');
+
+///////////////// This is the redirect logic. Comment and un-comment as neccessary
+
+  // const [worryTime, setWorryTime] = useState(""); // To store the formatted time string
+
+  
+  // useEffect(() => {
+  //   const loadWorrySettings = async () => {
+  //     const savedTime = await AsyncStorage.getItem('worryTime');
+
+  //     if (savedTime) setWorryTime(savedTime);
+  //   };
+
+  //   loadWorrySettings();
+  // }, []);
+
+  // const saveWorrySettings = async (time) => {
+  //   if (time) await AsyncStorage.setItem('worryTime', time);
+  // };
+
+  // // Redirect logic
+  // useEffect(() => {
+  //   const checkRedirect = async () => {
+  //     if (!worryTime) return;
+  
+  //     const [hour, minute] = worryTime.split(':').map(Number); // Parse the worryTime
+  //     const worryDateTime = new Date();
+  //     worryDateTime.setHours(hour, minute, 0, 0);
+  
+  //     const now = new Date();
+  
+  //     // Check if current time is after worryTime and before midnight
+  //     if (now >= worryDateTime && now.getDate() === worryDateTime.getDate()) {
+  //       router.push('/(screens)/start-worry-time'); // Redirect to another screen
+  //     }
+  //   };
+  
+  //   checkRedirect();
+  // }, [worryTime]);
+
+  ///////////////////////
 
   const saveItem = async () => {
     if (item.trim()) {
