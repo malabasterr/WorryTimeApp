@@ -7,7 +7,6 @@ export default function ViewListScreen() {
   const [items, setItems] = useState<string[]>([]);
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-  const [timerModalVisible, setTimerModalVisible] = useState(false);
   const [itemModalVisible, setItemModalVisible] = useState(false);
   const router = useRouter();
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
@@ -88,19 +87,24 @@ export default function ViewListScreen() {
       console.log('Error clearing remaining items from list', error);
     }
   }
+  
+  // Function to handle the navigation away from the page when complete
+  const navigateToNotClearedScreen = () => {
+    router.push('/(screens)/not-cleared');
+  };
 
   // Creates timer from the saved duration above
   useEffect(() => {
     if (timeLeft === null) return; // Skip if timer is not initialised
     if (timeLeft <= 0) {
-      setTimerModalVisible(true); // Show modal only when time reaches 0
       clearList();
+      navigateToNotClearedScreen();
       return;
     }
     const timer = setInterval(() => {
       setTimeLeft((prevTime) => (prevTime !== null ? prevTime - 1 : 0));
     }, 1000);
-    return () => clearInterval(timer); // Clean up on unmount
+    return () => clearInterval(timer);
   }, [timeLeft]);
 
   // Converts time into readable format
@@ -110,11 +114,6 @@ export default function ViewListScreen() {
     return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
   };
 
-  // Function to handle the navigation away from the page when complete
-  const handleBackToHome = () => {
-    setTimerModalVisible(false);
-    router.push('/(screens)/not-cleared');
-  };
 
   return (
     <View style={styles.mainContainer}>
@@ -140,23 +139,6 @@ export default function ViewListScreen() {
         <Text>Time remaining: </Text>
         {timeLeft !== null && timeLeft > 0 ? formatTime(timeLeft) : "Time's Up!"}
       </Text>
-
-      {/* Timer Modal */}
-      <Modal
-        transparent={true}
-        visible={timerModalVisible}
-        animationType="slide"
-        onRequestClose={() => setTimerModalVisible(false)}
-      >
-        <View style={styles.timerModalOverlay}>
-          <View style={styles.timerModalContent}>
-            <Text style={styles.timerModalText}>Time's Up!</Text>
-            <Pressable style={styles.timerModalButton} onPress={handleBackToHome}>
-              <Text style={styles.timerModalButtonText}>Back to Home</Text>
-            </Pressable>
-          </View>
-        </View>
-      </Modal>
 
       {/* Eventually this will be removed as we don't want them to be able to navigate back to the homepage! */}
       <Pressable onPress={() => router.push('/(tabs)/home')}>
@@ -203,12 +185,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     backgroundColor: '#355070',
   },
-  empty: {
-    textAlign: 'center',
-    fontSize: 25,
-    color: 'white',
-    padding: 50,
-  },
   listItems: {
     textAlign: 'left',
     fontSize: 20,
@@ -217,36 +193,6 @@ const styles = StyleSheet.create({
   timerText: {
     fontSize: 30,
     color: '#EAAC8B',
-  },
-  timerModalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  timerModalContent: {
-    backgroundColor: '#fff',
-    padding: 20,
-    borderRadius: 10,
-    alignItems: 'center',
-    width: '80%',
-  },
-  timerModalText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    color: '#355070',
-  },
-  timerModalButton: {
-    backgroundColor: '#EAAC8B',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-  },
-  timerModalButtonText: {
-    fontSize: 18,
-    color: '#fff',
-    fontWeight: 'bold',
   },
   submit: {
     width: 150,
@@ -301,11 +247,6 @@ const styles = StyleSheet.create({
     paddingTop: 150,
     padding: 20,
     backgroundColor:'#355070',
-  },
-  title: {
-    fontSize: 50,
-    color: '#EAAC8B',
-    marginBottom: 30,
   },
   message: {
     fontSize: 30,
