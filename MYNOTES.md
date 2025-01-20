@@ -8,11 +8,13 @@
 
 # Must Do
 
+AccessNumber added which increases each time the user clicks 'Start Worry Time'.
+This number needs to be cleared at midnight each day.
+
 - Add edge case for if a user does not input any worries at all
 - Notification when worry time starts (and any other notifcations deemed neccessary)
 
-At the moment, when the saved time is reached (between then and midnight), when the user tries to access the 'clock' it navigates them to the start-worry-time page.
-The redirection also needs to also be added to the homepage, but only when other elements are in place
+When safe to do so, clear redirect logic from clock.js page
 
 ### Last stages
 - Remove buttons from homepage and list page that are for development only

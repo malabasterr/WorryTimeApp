@@ -35,7 +35,7 @@ export default function HomeScreen() {
     loadWorrySettings();
   }, []);
 
-  const saveWorrySettings = async (time) => {
+  const saveWorrySettings = async (time: string) => {
     if (time) await AsyncStorage.setItem('worryTime', time);
   };
 

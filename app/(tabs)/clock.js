@@ -14,7 +14,7 @@ export default function ClockScreen() {
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [showDurationPicker, setShowDurationPicker] = useState(false);
   const [tempDuration, setTempDuration] = useState(); // To store the temporary duration while selecting
-    const router = useRouter();
+  const router = useRouter();
 
   useEffect(() => {
     const loadWorrySettings = async () => {
