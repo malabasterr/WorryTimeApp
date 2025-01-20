@@ -1,10 +1,35 @@
 import React from 'react';
 import { View, Text, StyleSheet, Pressable, } from 'react-native';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function StartWorryTimeScreen() {
   const router = useRouter();
+  const [accessNumber, setAccessNumber] = useState(0);
+
+  useEffect(() => {
+    const loadNumber = async () => {
+      const storedNumber = await AsyncStorage.getItem('storedNumber');
+      if (storedNumber) {
+        setAccessNumber(parseInt(storedNumber, 10));
+      }
+    };
+
+    loadNumber();
+  }, []);
+
+  const incrementAccessNumber = async () => {
+    const newAccessNumber = accessNumber + 1;
+    setAccessNumber(newAccessNumber);
+    await AsyncStorage.setItem('storedNumber', newAccessNumber.toString());
+  };
+
+  const goToWorryList = () => {
+    router.push('/(screens)/worry-list');
+    incrementAccessNumber();
+  };
 
   return (
     <View style={styles.mainContainer}>
@@ -14,7 +39,7 @@ export default function StartWorryTimeScreen() {
               Now it’s time to go through them before you can add more.
           </Text>
         </View>
-        <Pressable onPress={() => router.push('/(screens)/worry-list')}>
+        <Pressable onPress={goToWorryList}>
             <Text style={styles.startButton}>Start Worry Time</Text>
         </Pressable>
 

@@ -7,45 +7,61 @@ export default function HomeScreen() {
 
   const router = useRouter();
   const [item, setItem] = useState('');
+  const [accessNumber, setAccessNumber] = useState(0);
+
+  useEffect(() => {
+    const loadNumber = async () => {
+      const storedNumber = await AsyncStorage.getItem('storedNumber');
+      if (storedNumber) {
+        setAccessNumber(parseInt(storedNumber, 10));
+      }
+    };
+
+    loadNumber();
+  }, []);
 
 ///////////////// This is the redirect logic. Comment and un-comment as neccessary
 
-  // const [worryTime, setWorryTime] = useState(""); // To store the formatted time string
+  const [worryTime, setWorryTime] = useState(""); // To store the formatted time string
 
   
-  // useEffect(() => {
-  //   const loadWorrySettings = async () => {
-  //     const savedTime = await AsyncStorage.getItem('worryTime');
+  useEffect(() => {
+    const loadWorrySettings = async () => {
+      const savedTime = await AsyncStorage.getItem('worryTime');
 
-  //     if (savedTime) setWorryTime(savedTime);
-  //   };
+      if (savedTime) setWorryTime(savedTime);
+    };
 
-  //   loadWorrySettings();
-  // }, []);
+    loadWorrySettings();
+  }, []);
 
-  // const saveWorrySettings = async (time) => {
-  //   if (time) await AsyncStorage.setItem('worryTime', time);
-  // };
+  const saveWorrySettings = async (time) => {
+    if (time) await AsyncStorage.setItem('worryTime', time);
+  };
 
-  // // Redirect logic
-  // useEffect(() => {
-  //   const checkRedirect = async () => {
-  //     if (!worryTime) return;
+  // Redirect logic
+  useEffect(() => {
+    const checkRedirect = async () => {
+      if (!worryTime) return;
   
-  //     const [hour, minute] = worryTime.split(':').map(Number); // Parse the worryTime
-  //     const worryDateTime = new Date();
-  //     worryDateTime.setHours(hour, minute, 0, 0);
+      const [hour, minute] = worryTime.split(':').map(Number); // Parse the worryTime
+      const worryDateTime = new Date();
+      worryDateTime.setHours(hour, minute, 0, 0);
   
-  //     const now = new Date();
+      const now = new Date();
+
+      // Fetch accessNumber from AsyncStorage
+      const storedNumber = await AsyncStorage.getItem('storedNumber');
+      const currentAccessNumber = storedNumber ? parseInt(storedNumber, 10) : 0;
   
-  //     // Check if current time is after worryTime and before midnight
-  //     if (now >= worryDateTime && now.getDate() === worryDateTime.getDate()) {
-  //       router.push('/(screens)/start-worry-time'); // Redirect to another screen
-  //     }
-  //   };
+      // Check if current time is after worryTime and before midnight
+      if (now >= worryDateTime && now.getDate() === worryDateTime.getDate() && currentAccessNumber < 5) {
+        router.push('/(screens)/start-worry-time'); // Redirect to another screen
+      }
+    };
   
-  //   checkRedirect();
-  // }, [worryTime]);
+    checkRedirect();
+  }, [worryTime]);
 
   ///////////////////////
 
