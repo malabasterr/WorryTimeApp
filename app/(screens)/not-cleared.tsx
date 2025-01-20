@@ -15,7 +15,7 @@ export default function NotClearedScreen() {
         Remember to keep writing down your worries for your next worry time.
         </Text>
         <Pressable onPress={() => router.push('/(tabs)/home')}>
-            <Text style={styles.startButton}>Close</Text>
+            <Text style={styles.closeButton}>Close</Text>
         </Pressable>
 
     </View>
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     color: '#EAAC8B',
     marginBottom: 30,
   },
-  startButton: {
+  closeButton: {
     width: 150,
     height: 60,
     marginBottom: 30,
