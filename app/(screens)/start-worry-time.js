@@ -8,17 +8,44 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function StartWorryTimeScreen() {
   const router = useRouter();
   const [accessNumber, setAccessNumber] = useState(0);
+  const [lastResetDate, setLastResetDate] = useState(null);
 
   useEffect(() => {
     const loadNumber = async () => {
       const storedNumber = await AsyncStorage.getItem('storedNumber');
-      if (storedNumber) {
+      const storedDate = await AsyncStorage.getItem('lastResetDate');
+      const today = new Date().toDateString();;
+
+      // ON LOAD: If the last reset date is not today, accessNumber reset to 0
+      if (storedDate !== today) {
+        await AsyncStorage.setItem('storedNumber', '0');
+        await AsyncStorage.setItem('lastResetDate', today);
+        setAccessNumber(0);
+      } else if (storedNumber) {
         setAccessNumber(parseInt(storedNumber, 10));
       }
+      setLastResetDate(today);
     };
 
     loadNumber();
   }, []);
+
+  useEffect(() => {
+
+    // CHECK EVERY 1 MIN: If the last reset date is not today, accessNumber reset to 0
+    const interval = setInterval(async () => {
+      const today = new Date().toDateString();
+      if (lastResetDate !== today) {
+        // Reset access number and update the last reset date
+        await AsyncStorage.setItem('storedNumber', '0');
+        await AsyncStorage.setItem('lastResetDate', today);
+        setAccessNumber(0);
+        setLastResetDate(today);
+      }
+    }, 60000);
+
+    return () => clearInterval(interval);
+  }, [lastResetDate]);
 
   const incrementAccessNumber = async () => {
     const newAccessNumber = accessNumber + 1;

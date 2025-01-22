@@ -8,22 +8,26 @@ export default function HomeScreen() {
   const router = useRouter();
   const [item, setItem] = useState('');
   const [accessNumber, setAccessNumber] = useState(0);
+  const [worryTime, setWorryTime] = useState("");
 
   useEffect(() => {
     const loadNumber = async () => {
       const storedNumber = await AsyncStorage.getItem('storedNumber');
-      if (storedNumber) {
+      const storedDate = await AsyncStorage.getItem('lastResetDate');
+      const today = new Date().toDateString();
+  
+      if (storedDate !== today) {
+        // Reset access number and update the last reset date
+        await AsyncStorage.setItem('storedNumber', '0');
+        await AsyncStorage.setItem('lastResetDate', today);
+        setAccessNumber(0);
+      } else if (storedNumber) {
         setAccessNumber(parseInt(storedNumber, 10));
       }
     };
-
+  
     loadNumber();
   }, []);
-
-///////////////// This is the redirect logic. Comment and un-comment as neccessary
-
-  const [worryTime, setWorryTime] = useState(""); // To store the formatted time string
-
   
   useEffect(() => {
     const loadWorrySettings = async () => {
@@ -55,15 +59,13 @@ export default function HomeScreen() {
       const currentAccessNumber = storedNumber ? parseInt(storedNumber, 10) : 0;
   
       // Check if current time is after worryTime and before midnight
-      if (now >= worryDateTime && now.getDate() === worryDateTime.getDate() && currentAccessNumber < 5) {
+      if (now >= worryDateTime && now.getDate() === worryDateTime.getDate() && currentAccessNumber < 1) {
         router.push('/(screens)/start-worry-time'); // Redirect to another screen
       }
     };
   
     checkRedirect();
   }, [worryTime]);
-
-  ///////////////////////
 
   const saveItem = async () => {
     if (item.trim()) {
