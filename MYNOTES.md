@@ -8,9 +8,6 @@
 
 # Must Do
 
-AccessNumber added which increases each time the user clicks 'Start Worry Time'.
-This number needs to be cleared at midnight each day.
-
 - Add edge case for if a user does not input any worries at all
 - Notification when worry time starts (and any other notifcations deemed neccessary)
 
